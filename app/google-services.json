@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "98035350217",
+    "project_id": "dentistreservation",
+    "storage_bucket": "dentistreservation.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:98035350217:android:b4f281984d0438e8802b18",
+        "android_client_info": {
+          "package_name": "com.example.dentalapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "98035350217-dlthjdtgflqb7tj9emru0fan4u7k3lo4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOIE_YrIZmHZXcAbGQ-e1xDpNCQ8poWLM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "98035350217-dlthjdtgflqb7tj9emru0fan4u7k3lo4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:98035350217:android:e64cc8cf3f167dc9802b18",
+        "android_client_info": {
+          "package_name": "com.example.dentistreservation"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "98035350217-dlthjdtgflqb7tj9emru0fan4u7k3lo4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOIE_YrIZmHZXcAbGQ-e1xDpNCQ8poWLM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "98035350217-dlthjdtgflqb7tj9emru0fan4u7k3lo4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
