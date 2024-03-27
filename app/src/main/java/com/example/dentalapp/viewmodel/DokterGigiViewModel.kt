@@ -54,30 +54,6 @@ class DokterGigiViewModel : ViewModel() {
         }
     }
 
-    fun deleteDokter(idDokter: String, context: Context){
-        viewModelScope.launch(Dispatchers.IO){
-            db.collection("dokter").document(idDokter)
-                .delete()
-                .addOnSuccessListener {
-                    db.collection("dokter").document(idDokter).collection("jadwal")
-                        .get()
-                        .addOnSuccessListener {
-                            for (doc in it){
-                                doc.reference.delete()
-                            }
-                            Toast.makeText(context, "Berhasil menghapus data dokter!", Toast.LENGTH_SHORT).show()
-                        }
-                        .addOnFailureListener {
-                            Toast.makeText(context, "Gagal menghapus data jadwal!", Toast.LENGTH_SHORT).show()
-                        }
-                }
-                .addOnFailureListener {
-                    Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
-                }
-                .await()
-        }
-    }
-
     fun dokterByDate(date: String, jam: String): Flow<List<DokterGigi>> {
 
         return callbackFlow {

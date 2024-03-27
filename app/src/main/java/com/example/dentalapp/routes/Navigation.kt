@@ -9,23 +9,24 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.dentalapp.view.dashboard.DetailLayanan
-import com.example.dentalapp.view.dashboard.DetailReservasi
 import com.example.dentalapp.view.dashboard.Home
-import com.example.dentalapp.view.dashboard.ListLayanan
-import com.example.dentalapp.view.dashboard.ListReservasi
 import com.example.dentalapp.view.dashboard.Profile
 import com.example.dentalapp.view.dashboard.doktergigi.DetailDokter
 import com.example.dentalapp.view.dashboard.doktergigi.DetailJadwal
+import com.example.dentalapp.view.dashboard.doktergigi.DetailLayanan
 import com.example.dentalapp.view.dashboard.doktergigi.ListDokter
+import com.example.dentalapp.view.dashboard.doktergigi.ListLayanan
 import com.example.dentalapp.view.loginregister.Login
 import com.example.dentalapp.view.loginregister.Register
 import com.example.dentalapp.view.reservasi.BerhasilMembayar
+import com.example.dentalapp.view.reservasi.DetailReservasi
+import com.example.dentalapp.view.reservasi.ListReservasi
 import com.example.dentalapp.view.reservasi.MelakukanPembayaran
 import com.example.dentalapp.view.reservasi.MemilihTanggal
 import com.example.dentalapp.viewmodel.DokterGigiViewModel
 import com.example.dentalapp.viewmodel.JadwalViewModel
 import com.example.dentalapp.viewmodel.LayananViewModel
+import com.example.dentalapp.viewmodel.RefreshViewModel
 import com.example.dentalapp.viewmodel.ReservasiViewModel
 import com.example.dentalapp.viewmodel.UsersViewModel
 import com.example.dentalapp.viewmodel.loginregister.LoginViewModel
@@ -71,7 +72,8 @@ fun Navigation(){
         composable(route = Screen.ListReservasiScreen.route){
             ListReservasi(
                 navController = navController,
-                reservasiViewModel = ReservasiViewModel()
+                reservasiViewModel = ReservasiViewModel(),
+                refreshViewModel = RefreshViewModel()
             )
         }
 
@@ -80,7 +82,8 @@ fun Navigation(){
         ){
             MemilihTanggal(
                 navController = navController,
-                dokterGigiViewModel = DokterGigiViewModel()
+                dokterGigiViewModel = DokterGigiViewModel(),
+                layananViewModel = LayananViewModel()
             )
         }
 
@@ -111,6 +114,7 @@ fun Navigation(){
             MelakukanPembayaran(
                 navController = navController,
                 usersViewModel = UsersViewModel(),
+                layananViewModel = LayananViewModel(),
                 namaDok = nama,
                 tanggal = tanggal,
                 hari = hari,

@@ -6,8 +6,9 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 
 @Composable
-fun DeleteConfirmationDialog(
+fun ConfirmationDialog(
     showDialog: Boolean,
+    alertText: String,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -15,7 +16,7 @@ fun DeleteConfirmationDialog(
         AlertDialog(
             onDismissRequest = onDismiss,
             title = { Text("Konfirmasi") },
-            text = { Text("Apakah Anda yakin ingin menghapus?") },
+            text = { Text(alertText) },
             confirmButton = {
                 TextButton(onClick = {
                     onConfirm()

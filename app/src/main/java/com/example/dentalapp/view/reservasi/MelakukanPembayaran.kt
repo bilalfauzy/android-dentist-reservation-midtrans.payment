@@ -30,6 +30,7 @@ import com.example.dentalapp.theme.backColor
 import com.example.dentalapp.view.customcomponent.CustomSpacer
 import com.example.dentalapp.view.customcomponent.MyAppBar
 import com.example.dentalapp.view.customcomponent.MyButton
+import com.example.dentalapp.viewmodel.LayananViewModel
 import com.example.dentalapp.viewmodel.UsersViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.midtrans.sdk.corekit.callback.TransactionFinishedCallback
@@ -48,6 +49,7 @@ import com.midtrans.sdk.uikit.SdkUIFlowBuilder
 fun MelakukanPembayaran(
     navController: NavHostController,
     usersViewModel: UsersViewModel,
+    layananViewModel: LayananViewModel,
     namaDok: String,
     tanggal: String,
     hari: String,

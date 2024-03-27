@@ -39,28 +39,35 @@ import com.example.dentalapp.view.customcomponent.CustomTextField
 import com.example.dentalapp.view.customcomponent.MyAppBar
 import com.example.dentalapp.view.customcomponent.MyButton
 import com.example.dentalapp.viewmodel.DokterGigiViewModel
+import com.example.dentalapp.viewmodel.LayananViewModel
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
+
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MemilihTanggal(
     navController: NavHostController,
-    dokterGigiViewModel: DokterGigiViewModel
+    dokterGigiViewModel: DokterGigiViewModel,
+    layananViewModel: LayananViewModel
 ){
     val namaDok = remember {
         mutableStateOf<String?>(null)
     }
 
-    val selectedDate = remember {
-        mutableStateOf(LocalDate.now())
+    val namaLayanan = remember {
+        mutableStateOf<String?>(null)
     }
 
-    val selectedJam = remember {
-        mutableStateOf("08:00")
+    val biayaLayanan = remember {
+        mutableStateOf<String?>(null)
+    }
+
+    val selectedDate = remember {
+        mutableStateOf(LocalDate.now())
     }
 
     val jam = remember {
@@ -171,21 +178,41 @@ fun MemilihTanggal(
                 val dokterList by dokterGigiViewModel.dokterByDate(selectedDate.value.toString(), jam.value!!).collectAsState(
                     initial = emptyList()
                 )
-
                 val listNama = dokterList.map {
                     it.nama.toString()
                 }
-
                 //pilih daftar dokter
                 if (listNama.isNotEmpty()){
                     CustomSpacer()
                     CustomExposedDropdown(options = listNama, label = "Pilih dokter", errorText = errorText.value, onOptionSelected = {
                         namaDok.value = it
                     }, selectedOption = namaDok.value)
+
+                    //pilih layanan
+                    if (namaDok.value != null){
+                        layananViewModel.getLayananByDokter(namaDok.value!!)
+                        val layananList by layananViewModel.layananList.collectAsState(emptyList())
+                        val namaList = layananList.map {
+                            it.nama.toString()
+                        }
+                        val listBiaya = layananList.map {
+                            it.biaya.toString()
+                        }
+                        if (namaList.isNotEmpty()){
+                            CustomSpacer()
+                            CustomExposedDropdown(options = namaList, label = "Pilih layanan", errorText = errorText.value, onOptionSelected = {
+                                namaLayanan.value = it
+                            }, selectedOption = namaLayanan.value)
+                        }else{
+                            CustomSpacer()
+                            Text(text = "Tidak ada layanan yang tersedia")
+                        }
+                    }
                 }else{
                     CustomSpacer()
                     Text(text = "Tidak ada dokter tersedia")
                 }
+
             }
 
             CustomSpacer()
@@ -212,6 +239,7 @@ fun MemilihTanggal(
                 onClick = {
                     if (
                         namaDok.value == null || jam.value == null ||
+                                namaLayanan.value == null ||
                                 selectedDate.value.toString().isEmpty() ||
                                 keluhan.value.isEmpty()
                     ){

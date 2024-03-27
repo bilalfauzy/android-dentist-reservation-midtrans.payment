@@ -1,4 +1,4 @@
-package com.example.dentalapp.view.dashboard
+package com.example.dentalapp.view.dashboard.doktergigi
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult

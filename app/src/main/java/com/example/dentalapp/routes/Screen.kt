@@ -9,8 +9,8 @@ sealed class Screen(val route: String){
     object MemilihTanggalScreen : Screen("memilihtanggal_screen")
     object MelakukanPembayaranScreen : Screen("melakukanpembayaran_screen")
     object BerhasilMembayarScreen : Screen("berhasilmembayar_screen")
-    object CreateDokterScreen : Screen("createdokter_screen")
-    object CreateJadwalScreen : Screen("createjadwal_screen")
+    object MemilihDokterScreen : Screen("memilihdokter_screen")
+    object MemilihLayananScreen : Screen("memilihlayanan_screen")
 
     object AdminHomeScreen : Screen("adminhome_screen")
 

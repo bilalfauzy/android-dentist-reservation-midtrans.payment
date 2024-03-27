@@ -1,4 +1,4 @@
-package com.example.dentalapp.view.dashboard.doktergigi
+package com.example.dentalapp.view.reservasi
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,6 +17,8 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -29,21 +31,31 @@ import com.example.dentalapp.view.customcomponent.MyAppBar
 import com.example.dentalapp.viewmodel.DokterGigiViewModel
 
 @Composable
-fun ListDokter(
+fun MemilihDokter(
     navController: NavHostController,
-    dokterGigiViewModel: DokterGigiViewModel
+    dokterGigiViewModel: DokterGigiViewModel,
+    tanggal: String,
+    jam: String
 ){
     val listDokter by dokterGigiViewModel.dokterList.collectAsState(emptyList())
     val context = LocalContext.current
+
+    val selectedDate = remember {
+        mutableStateOf("")
+    }
+
+    val selectedJam = remember {
+        mutableStateOf("")
+    }
 
     Column(
         modifier = Modifier.background(backColor)
     ) {
         MyAppBar(
-            title = "List dokter gigi",
+            title = "Pilih dokter",
             navigationIcon = Icons.Filled.ArrowBack,
             onNavigationClick = {
-                navController.popBackStack(Screen.HomeScreen.route, false)
+                navController.popBackStack(Screen.MemilihTanggalScreen.route, false)
             }
         )
 

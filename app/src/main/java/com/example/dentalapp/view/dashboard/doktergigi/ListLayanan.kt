@@ -21,48 +21,50 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.dentalapp.model.DokterGigi
+import com.example.dentalapp.model.Layanan
 import com.example.dentalapp.routes.Screen
 import com.example.dentalapp.theme.backColor
 import com.example.dentalapp.view.customcomponent.CustomDivider
 import com.example.dentalapp.view.customcomponent.MyAppBar
-import com.example.dentalapp.viewmodel.DokterGigiViewModel
+import com.example.dentalapp.viewmodel.LayananViewModel
 
 @Composable
-fun ListDokter(
+fun ListLayanan(
     navController: NavHostController,
-    dokterGigiViewModel: DokterGigiViewModel
-){
-    val listDokter by dokterGigiViewModel.dokterList.collectAsState(emptyList())
+    layananViewModel: LayananViewModel
+) {
+    val listLayanan by layananViewModel.layananList.collectAsState(emptyList())
     val context = LocalContext.current
 
     Column(
         modifier = Modifier.background(backColor)
     ) {
         MyAppBar(
-            title = "List dokter gigi",
+            title = "Layanan klinik",
             navigationIcon = Icons.Filled.ArrowBack,
             onNavigationClick = {
                 navController.popBackStack(Screen.HomeScreen.route, false)
             }
         )
 
-        MyListDokter(
-            listDokter,
-            navController,
+        PasienListLayanan(
+            items = listLayanan,
+            navController = navController,
             onItemClick = {
-                navController.navigate(Screen.DetailDokterScreen.route +
-                        "/${it.id}/${it.nama}/${it.gender}/${it.spesialis}/${it.umur}")
+                navController.navigate(Screen.DetailLayananScreen.route +
+                        "/${it.nama}/${it.biaya}/${it.deskripsi}/${it.gambar}")
             }
         )
+
     }
+
 }
 
 @Composable
-fun MyListDokter(
-    items: List<DokterGigi>,
+fun PasienListLayanan(
+    items: List<Layanan>,
     navController: NavHostController,
-    onItemClick: (DokterGigi) -> Unit
+    onItemClick: (Layanan) -> Unit
 ){
 
     LazyColumn(
@@ -70,27 +72,26 @@ fun MyListDokter(
             .fillMaxSize()
             .padding(top = 20.dp, bottom = 20.dp)
     ) {
-        items(items) { dokter ->
+        items(items) { layanan ->
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable(onClick = { onItemClick(dokter) }),
+                    .clickable(onClick = { onItemClick(layanan) }),
                 elevation = 2.dp
             ) {
                 Row(
                     modifier = Modifier.padding(10.dp)
                 ) {
                     Column(){
-                        Text(text = "ID dokter  : ${dokter.id}")
-                        Text(text = "Nama : ${dokter.nama}")
-                        Text(text = "Spesialis : ${dokter.spesialis}")
+                        Text(text = "ID layanan  : ${layanan.idLayanan}")
+                        Text(text = "Nama : ${layanan.nama}")
+                        Text(text = "Biaya : Rp${layanan.biaya}")
+
                     }
                     Spacer(modifier = Modifier.weight(1f))
-
                 }
             }
             CustomDivider()
         }
     }
-
 }
