@@ -17,17 +17,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.dentalapp.model.PaymentResponse
 import com.example.dentalapp.model.Reservasi
 import com.example.dentalapp.routes.Screen
+import com.example.dentalapp.theme.DentalAppTheme
 import com.example.dentalapp.theme.backColor
 import com.example.dentalapp.view.customcomponent.CustomSpacer
 import com.example.dentalapp.view.customcomponent.MyButton
 import com.example.dentalapp.viewmodel.ReservasiViewModel
 import com.example.dentalapp.viewmodel.UsersViewModel
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
@@ -40,7 +43,7 @@ fun BerhasilMembayar(
     navController: NavHostController,
     reservasiViewModel: ReservasiViewModel,
     usersViewModel: UsersViewModel,
-    orderId: String,
+    idPesanan: String,
     namaDok: String,
     tanggal: String,
     hari: String,
@@ -90,6 +93,16 @@ fun BerhasilMembayar(
     }
     val context = LocalContext.current
 
+    jsonParsing(
+        context,
+        idPesanan,
+        idTransaksi,
+        jenisPembayaran,
+        status,
+        expire,
+        waktuTransaksi
+    )
+
     Column() {
 
         Column (
@@ -98,7 +111,7 @@ fun BerhasilMembayar(
                 .background(backColor)
                 .padding(20.dp)
         ){
-            Text(text = "id order : ${orderId}\n")
+            Text(text = "id order : ${idPesanan}\n")
             Text(text = "id transaksi : ${idTransaksi.value}\n")
             Text(text = "jenis pembayaran : ${jenisPembayaran.value}\n")
             Text(text = "status : ${status.value}\n")
@@ -131,13 +144,14 @@ fun BerhasilMembayar(
                 onClick = {
                     jsonParsing(
                         context,
-                        orderId,
+                        idPesanan,
                         idTransaksi,
                         jenisPembayaran,
                         status,
                         expire,
                         waktuTransaksi
                     )
+
                 },
                 text = "CETAK FAKTUR"
             )

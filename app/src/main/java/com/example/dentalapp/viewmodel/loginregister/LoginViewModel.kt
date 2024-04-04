@@ -11,7 +11,7 @@ import com.example.dentalapp.routes.Screen
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
-class LoginViewModel() : ViewModel() {
+class LoginViewModel : ViewModel() {
     private val _loginState = MutableLiveData<LoginState>()
 
     private val firebaseAuth = FirebaseAuth.getInstance()

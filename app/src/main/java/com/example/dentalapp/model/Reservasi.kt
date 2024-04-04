@@ -6,6 +6,7 @@ import com.google.firebase.firestore.IgnoreExtraProperties
 data class Reservasi(
     var idRes: String? = null,
     var idUser: String? = null,
+    var idPesanan: String? = null,
     var namaUser: String? = null,
     var emailUser: String? = null,
     var noWa: String? = null,

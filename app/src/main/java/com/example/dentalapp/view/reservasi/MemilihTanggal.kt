@@ -5,15 +5,19 @@ import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -25,21 +29,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.dentalapp.R
+import com.example.dentalapp.model.DokterGigi
 import com.example.dentalapp.routes.Screen
 import com.example.dentalapp.theme.backColor
+import com.example.dentalapp.view.customcomponent.CustomDivider
 import com.example.dentalapp.view.customcomponent.CustomDropdownJam
-import com.example.dentalapp.view.customcomponent.CustomExposedDropdown
 import com.example.dentalapp.view.customcomponent.CustomSpacer
-import com.example.dentalapp.view.customcomponent.CustomTextField
 import com.example.dentalapp.view.customcomponent.MyAppBar
 import com.example.dentalapp.view.customcomponent.MyButton
 import com.example.dentalapp.viewmodel.DokterGigiViewModel
-import com.example.dentalapp.viewmodel.LayananViewModel
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.Calendar
@@ -52,10 +54,9 @@ import java.util.Locale
 fun MemilihTanggal(
     navController: NavHostController,
     dokterGigiViewModel: DokterGigiViewModel,
-    layananViewModel: LayananViewModel
 ){
     val namaDok = remember {
-        mutableStateOf<String?>(null)
+        mutableStateOf("")
     }
 
     val namaLayanan = remember {
@@ -108,6 +109,7 @@ fun MemilihTanggal(
     val context = LocalContext.current
     var isError = false
 
+
     Column() {
         MyAppBar(
             title = "Memilih tanggal",
@@ -129,7 +131,7 @@ fun MemilihTanggal(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 OutlinedTextField(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(0.8f),
                     value = selectedDate.value.toString(),
                     onValueChange = {
                         selectedDate.value = LocalDate.parse(it)
@@ -178,78 +180,36 @@ fun MemilihTanggal(
                 val dokterList by dokterGigiViewModel.dokterByDate(selectedDate.value.toString(), jam.value!!).collectAsState(
                     initial = emptyList()
                 )
-                val listNama = dokterList.map {
-                    it.nama.toString()
-                }
-                //pilih daftar dokter
-                if (listNama.isNotEmpty()){
+                if (dokterList.isEmpty()){
                     CustomSpacer()
-                    CustomExposedDropdown(options = listNama, label = "Pilih dokter", errorText = errorText.value, onOptionSelected = {
-                        namaDok.value = it
-                    }, selectedOption = namaDok.value)
-
-                    //pilih layanan
-                    if (namaDok.value != null){
-                        layananViewModel.getLayananByDokter(namaDok.value!!)
-                        val layananList by layananViewModel.layananList.collectAsState(emptyList())
-                        val namaList = layananList.map {
-                            it.nama.toString()
-                        }
-                        val listBiaya = layananList.map {
-                            it.biaya.toString()
-                        }
-                        if (namaList.isNotEmpty()){
-                            CustomSpacer()
-                            CustomExposedDropdown(options = namaList, label = "Pilih layanan", errorText = errorText.value, onOptionSelected = {
-                                namaLayanan.value = it
-                            }, selectedOption = namaLayanan.value)
-                        }else{
-                            CustomSpacer()
-                            Text(text = "Tidak ada layanan yang tersedia")
-                        }
-                    }
+                    Text(text = "Tidak ada dokter tersedia..")
                 }else{
                     CustomSpacer()
-                    Text(text = "Tidak ada dokter tersedia")
+                    Text(text = "Pilih dokter")
+                    LazyListDokter(
+                        items = dokterList,
+                        onItemClick = {
+                            namaDok.value = it.nama.toString()
+                        }
+                    )
                 }
-
             }
 
-            CustomSpacer()
-            //isi keluhan
-            CustomTextField(
-                value = keluhan.value,
-                onValueChange = {
-                    keluhan.value = it
-                    isError = it.isEmpty()
-                },
-                label = "Keluhan",
-                leadingIcon = {
-                    Icon(painter = painterResource(
-                        id = R.drawable.ic_email),
-                        contentDescription = "Email",
-                        tint = MaterialTheme.colors.primary
-                    )
-                },
-                isError = isError
-            )
-
+            Text(text = namaDok.value)
             Spacer(modifier = Modifier.weight(1f))
             MyButton(
                 onClick = {
                     if (
-                        namaDok.value == null || jam.value == null ||
-                                namaLayanan.value == null ||
-                                selectedDate.value.toString().isEmpty() ||
-                                keluhan.value.isEmpty()
+                        namaDok.value.isEmpty() || jam.value == null ||
+                                selectedDate.value.toString().isEmpty()
                     ){
                         errorText.value = "Pastikan semua form terisi!"
                     }else{
-                        navController.navigate(Screen.MelakukanPembayaranScreen.route+
-                            "/${namaDok.value}/${selectedDate.value}/${selectedDate.value.dayOfWeek}/${jam.value}/${keluhan.value}")
+                        navController.navigate(Screen.MemilihLayananScreen.route+
+                            "/${namaDok.value}/${selectedDate.value}/${selectedDate.value.dayOfWeek}/${jam.value}")
                     }
                 },
-                text = "OK"
+                text = "LANJUT"
             )
 
             if (errorText.value.isNotEmpty()){
@@ -259,4 +219,48 @@ fun MemilihTanggal(
 
         }
     }
+}
+
+@Composable
+fun LazyListDokter(
+    items: List<DokterGigi>,
+    onItemClick: (DokterGigi) -> Unit
+){
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.7f)
+            .padding(top = 20.dp, bottom = 20.dp)
+    ) {
+        items(items) { dokter ->
+            val isSelected = remember {
+                mutableStateOf(false)
+            }
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        isSelected.value = !isSelected.value
+                        onItemClick(dokter)
+                    },
+                elevation = 2.dp,
+                backgroundColor = if (isSelected.value) Color(backColor.value) else Color(backColor.value)
+            ) {
+                Row(
+                    modifier = Modifier.padding(10.dp)
+                ) {
+                    Column(){
+                        Text(text = "ID dokter  : ${dokter.id}")
+                        Text(text = "Nama : ${dokter.nama}")
+                        Text(text = "Spesialis : ${dokter.spesialis}")
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+
+                }
+            }
+            CustomDivider()
+        }
+    }
+
 }

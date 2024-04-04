@@ -22,6 +22,7 @@ import com.example.dentalapp.view.reservasi.BerhasilMembayar
 import com.example.dentalapp.view.reservasi.DetailReservasi
 import com.example.dentalapp.view.reservasi.ListReservasi
 import com.example.dentalapp.view.reservasi.MelakukanPembayaran
+import com.example.dentalapp.view.reservasi.MemilihLayanan
 import com.example.dentalapp.view.reservasi.MemilihTanggal
 import com.example.dentalapp.viewmodel.DokterGigiViewModel
 import com.example.dentalapp.viewmodel.JadwalViewModel
@@ -82,14 +83,45 @@ fun Navigation(){
         ){
             MemilihTanggal(
                 navController = navController,
-                dokterGigiViewModel = DokterGigiViewModel(),
-                layananViewModel = LayananViewModel()
+                dokterGigiViewModel = DokterGigiViewModel()
             )
         }
 
-        composable(route = Screen.MelakukanPembayaranScreen.route + "/{nama}/{tanggal}/{hari}/{jam}/{keluhan}",
+        composable(
+            route = Screen.MemilihLayananScreen.route +
+            "/{namaDok}/{tanggal}/{hari}/{jam}",
             arguments = listOf(
-                navArgument("nama"){
+                navArgument("namaDok"){
+                    type = NavType.StringType
+                },
+                navArgument("tanggal"){
+                    type = NavType.StringType
+                },
+                navArgument("hari"){
+                    type = NavType.StringType
+                },
+                navArgument("jam"){
+                    type = NavType.StringType
+                },
+            )
+        ){
+            val namaDok = it.arguments?.getString("namaDok")!!
+            val tanggal = it.arguments?.getString("tanggal")!!
+            val hari = it.arguments?.getString("hari")!!
+            val jam = it.arguments?.getString("jam")!!
+            MemilihLayanan(
+                navController = navController,
+                layananViewModel = LayananViewModel(),
+                namaDok,
+                tanggal,
+                hari,
+                jam
+            )
+        }
+
+        composable(route = Screen.MelakukanPembayaranScreen.route + "/{namaDok}/{tanggal}/{hari}/{jam}/{keluhan}",
+            arguments = listOf(
+                navArgument("namaDok"){
                     type = NavType.StringType
                 },
                 navArgument("tanggal"){
@@ -106,7 +138,7 @@ fun Navigation(){
                 }
             )
         ){
-            val nama = it.arguments?.getString("nama")!!
+            val namaDok = it.arguments?.getString("namaDok")!!
             val tanggal = it.arguments?.getString("tanggal")!!
             val hari = it.arguments?.getString("hari")!!
             val jam = it.arguments?.getString("jam")!!
@@ -114,8 +146,8 @@ fun Navigation(){
             MelakukanPembayaran(
                 navController = navController,
                 usersViewModel = UsersViewModel(),
-                layananViewModel = LayananViewModel(),
-                namaDok = nama,
+                reservasiViewModel = ReservasiViewModel(),
+                namaDok = namaDok,
                 tanggal = tanggal,
                 hari = hari,
                 jam = jam,
@@ -125,9 +157,9 @@ fun Navigation(){
 
         composable(
             route = Screen.BerhasilMembayarScreen.route +
-                    "/{orderId}/{nama}/{tanggal}/{hari}/{jam}/{keluhan}",
+                    "/{idPesanan}/{nama}/{tanggal}/{hari}/{jam}/{keluhan}",
             arguments = listOf(
-                navArgument("orderId"){
+                navArgument("idPesanan"){
                     type = NavType.StringType
                 },
                 navArgument("nama"){
@@ -147,7 +179,7 @@ fun Navigation(){
                 },
             )
         ){
-            val orderId = it.arguments?.getString("orderId")!!
+            val idPesanan = it.arguments?.getString("idPesanan")!!
             val nama = it.arguments?.getString("nama")!!
             val tanggal = it.arguments?.getString("tanggal")!!
             val hari = it.arguments?.getString("hari")!!
@@ -157,7 +189,7 @@ fun Navigation(){
                 navController = navController,
                 reservasiViewModel = ReservasiViewModel(),
                 usersViewModel = UsersViewModel(),
-                orderId = orderId,
+                idPesanan = idPesanan,
                 namaDok = nama,
                 tanggal = tanggal,
                 hari = hari,
