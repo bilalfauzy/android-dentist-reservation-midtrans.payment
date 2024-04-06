@@ -1,26 +1,35 @@
 package com.example.dentalapp.view.dashboard.doktergigi
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.outlined.KeyboardArrowLeft
+import androidx.compose.material.icons.outlined.MedicalServices
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import coil.compose.rememberAsyncImagePainter
 import com.example.dentalapp.model.Layanan
 import com.example.dentalapp.routes.Screen
 import com.example.dentalapp.theme.backColor
@@ -41,7 +50,7 @@ fun ListLayanan(
     ) {
         MyAppBar(
             title = "Layanan klinik",
-            navigationIcon = Icons.Filled.ArrowBack,
+            navigationIcon = Icons.Outlined.KeyboardArrowLeft,
             onNavigationClick = {
                 navController.popBackStack(Screen.HomeScreen.route, false)
             }
@@ -52,7 +61,7 @@ fun ListLayanan(
             navController = navController,
             onItemClick = {
                 navController.navigate(Screen.DetailLayananScreen.route +
-                        "/${it.nama}/${it.biaya}/${it.deskripsi}/${it.gambar}")
+                        "${it.idLayanan}/${it.nama}/${it.biaya}/${it.deskripsi}/p")
             }
         )
 
@@ -70,9 +79,9 @@ fun PasienListLayanan(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 20.dp, bottom = 20.dp)
     ) {
         items(items) { layanan ->
+            val imgPainter = rememberAsyncImagePainter(layanan.gambar)
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -81,11 +90,26 @@ fun PasienListLayanan(
             ) {
                 Row(
                     modifier = Modifier.padding(10.dp)
+                        .fillMaxHeight(0.3f)
                 ) {
-                    Column(){
-                        Text(text = "ID layanan  : ${layanan.idLayanan}")
-                        Text(text = "Nama : ${layanan.nama}")
-                        Text(text = "Biaya : Rp${layanan.biaya}")
+                    Image(
+                        imageVector = Icons.Outlined.MedicalServices,
+                        contentDescription = "foto layanan",
+                        modifier = Modifier
+                            .size(100.dp, 100.dp)
+                            .padding(end = 8.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop
+                    )
+
+                    Column(
+                        modifier = Modifier.fillMaxWidth(0.8f)
+                    ){
+                        Text(
+                            text = "${layanan.nama}",
+                            fontWeight = FontWeight.Medium
+                        )
+                        Text(text = "Rp${layanan.biaya}")
 
                     }
                     Spacer(modifier = Modifier.weight(1f))

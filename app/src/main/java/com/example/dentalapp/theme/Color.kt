@@ -11,3 +11,5 @@ val baseColor = Color(0xFF03A9F4)
 val backColor = Color(0xFFE4F1FA)
 val errorColor = Color(0xFFEF9A9A)
 val acceptColor = Color(0xFFA5D6A7)
+val warningColor = Color(0xFFFBC02D)
+

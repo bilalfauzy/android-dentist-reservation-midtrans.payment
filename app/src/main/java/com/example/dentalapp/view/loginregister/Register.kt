@@ -19,7 +19,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -65,7 +65,7 @@ fun Register(
 
         MyAppBar(
             title = "Register",
-            navigationIcon = Icons.Filled.ArrowBack,
+            navigationIcon = Icons.Filled.ArrowBackIosNew,
             onNavigationClick = {
                 navController.popBackStack(Screen.LoginScreen.route, false)
             }

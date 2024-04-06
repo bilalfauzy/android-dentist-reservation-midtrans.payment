@@ -4,37 +4,46 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.outlined.DoneAll
+import androidx.compose.material.icons.outlined.KeyboardArrowLeft
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.dentalapp.midtrans.MidtransConfig
 import com.example.dentalapp.model.PaymentResponse
 import com.example.dentalapp.model.Reservasi
 import com.example.dentalapp.routes.Screen
+import com.example.dentalapp.theme.acceptColor
 import com.example.dentalapp.theme.backColor
 import com.example.dentalapp.view.customcomponent.CustomCard
+import com.example.dentalapp.view.customcomponent.CustomDivider
 import com.example.dentalapp.view.customcomponent.CustomSpacer
 import com.example.dentalapp.view.customcomponent.MyAppBar
 import com.example.dentalapp.view.customcomponent.MyButton
@@ -57,7 +66,6 @@ import java.io.IOException
 import java.util.UUID
 
 
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @SuppressLint("RememberReturnType")
 @Composable
 fun MelakukanPembayaran(
@@ -113,9 +121,9 @@ fun MelakukanPembayaran(
     val transactionResult = remember { mutableStateOf<TransactionResult?>(null) }
 
     UiKitApi.Builder()
-        .withMerchantClientKey("SB-Mid-client-mX47J54iGwdG1tVi")
+        .withMerchantClientKey(MidtransConfig.CLIENT_KEY)
         .withContext(context)
-        .withMerchantUrl("http://192.168.100.4:8080/api/")
+        .withMerchantUrl(MidtransConfig.SERVER)
         .enableLog(true)
         .withColorTheme(
             com.midtrans.sdk.uikit.api.model.CustomColorTheme(
@@ -161,7 +169,7 @@ fun MelakukanPembayaran(
         Column {
             MyAppBar(
                 title = "Detail Reservasi",
-                navigationIcon = Icons.Filled.ArrowBack,
+                navigationIcon = Icons.Outlined.KeyboardArrowLeft,
                 onNavigationClick = {
                     navController.popBackStack(Screen.MemilihTanggalScreen.route, false)
                 }
@@ -177,14 +185,34 @@ fun MelakukanPembayaran(
                 CustomCard(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = "Nama : ${namaPemesan}")
-                    Text(text = "Email : ${email}")
-                    Text(text = "Nomor wa : ${noWa}")
-                    Text(text = "Nama dokter : ${namaDok}")
-                    Text(text = "Tanggal : ${hari}/${tanggal}")
-                    Text(text = "Jam : ${jam}")
-                    Text(text = "Keluhan/penyakit : ${keluhan}")
-                    Text(text = "Biaya reservasi : ${biaya}")
+                    Column(
+                        modifier = Modifier.padding(10.dp)
+                    ) {
+                        Text(
+                            text = "Nama : ${namaPemesan}",
+                            fontWeight = FontWeight.Medium,
+                        )
+                        CustomDivider()
+                        CustomSpacer()
+                        Text(text = "Email : ${email}")
+                        CustomSpacer()
+                        Text(text = "Nomor wa : ${noWa}")
+                        CustomSpacer()
+                        Text(text = "Nama dokter : ${namaDok}")
+                        CustomSpacer()
+                        Text(text = "Tanggal : ${hari}/${tanggal}")
+                        CustomSpacer()
+                        Text(text = "Jam : ${jam}")
+                        CustomSpacer()
+                        Text(text = "Keluhan/penyakit : ${keluhan}")
+                        CustomSpacer()
+                        Text(
+                            text = "Biaya: ${biaya}",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp
+                        )
+                    }
+
                 }
 
                 Spacer(modifier = Modifier.weight(1f))
@@ -203,19 +231,30 @@ fun MelakukanPembayaran(
         Column {
             MyAppBar(
                 title = "Berhasil",
-                navigationIcon = Icons.Filled.ArrowBack,
+                navigationIcon = Icons.Filled.KeyboardArrowLeft,
                 onNavigationClick = {
-                    navController.popBackStack(Screen.MemilihTanggalScreen.route, false)
+                    navController.popBackStack(Screen.HomeScreen.route, false)
                 }
             )
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(backColor)
-                    .padding(20.dp)
+                    .padding(20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
 
-                Text(text = "BERHASIL MEMBUAT RESERVASI")
+                Icon(
+                    imageVector = Icons.Outlined.DoneAll,
+                    contentDescription ="",
+                    tint = acceptColor,
+                    modifier = Modifier.size(50.dp)
+                )
+                Text(
+                    text = "BERHASIL MEMBUAT RESERVASI",
+                    fontSize = 20.sp
+                )
 
                 Spacer(modifier = Modifier.weight(1f))
                 MyButton(
@@ -251,7 +290,7 @@ fun startPayment(
     val requestBody =
         paymentData.toString().toRequestBody("application/json".toMediaTypeOrNull())
     val request = Request.Builder()
-        .url("http://192.168.100.4:8080/api/create-payment")
+        .url("https://midtrans.my-api.monster/api/create-payment")
         .post(requestBody)
         .addHeader("accept", "application/json")
         .addHeader("content-type", "application/json")
@@ -338,11 +377,11 @@ fun getPayment(
                 expire.value = parsed.expire.toString()
                 waktuTransaksi.value = parsed.waktuTransaksi.toString()
 
-                if (statusPembayaran.equals("settlement")){
-                    statusPembayaran.value = "sudah dibayar"
-                }else if(statusPembayaran.equals("pending")){
-                    statusPembayaran.value = "belum dibayar"
-                }
+//                if (statusPembayaran.equals("settlement")){
+//                    statusPembayaran.value = "sudah dibayar"
+//                }else if(statusPembayaran.equals("pending")){
+//                    statusPembayaran.value = "belum dibayar"
+//                }
                 val reservasi = Reservasi(
                     idRes = idRes,
                     idUser = idUser,

@@ -39,6 +39,14 @@ class DokterGigiViewModel : ViewModel() {
             }
         }
     }
+    fun dokterById(idDokter: String){
+        viewModelScope.launch(Dispatchers.IO){
+            val snapshot = db.collection("dokter")
+                .get().await()
+            val dokterList = snapshot.toObjects(DokterGigi::class.java)
+            _dokterList.value = dokterList
+        }
+    }
 
     fun updateDokter(dokterGigi: DokterGigi, context: Context){
         viewModelScope.launch(Dispatchers.IO){

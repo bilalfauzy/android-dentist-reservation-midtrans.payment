@@ -4,8 +4,10 @@ import android.app.DatePickerDialog
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,30 +15,38 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.DateRange
+import androidx.compose.material.icons.outlined.KeyboardArrowLeft
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import coil.compose.rememberAsyncImagePainter
 import com.example.dentalapp.model.DokterGigi
 import com.example.dentalapp.routes.Screen
 import com.example.dentalapp.theme.backColor
-import com.example.dentalapp.view.customcomponent.CustomDivider
+import com.example.dentalapp.theme.warningColor
 import com.example.dentalapp.view.customcomponent.CustomDropdownJam
 import com.example.dentalapp.view.customcomponent.CustomSpacer
 import com.example.dentalapp.view.customcomponent.MyAppBar
@@ -57,14 +67,6 @@ fun MemilihTanggal(
 ){
     val namaDok = remember {
         mutableStateOf("")
-    }
-
-    val namaLayanan = remember {
-        mutableStateOf<String?>(null)
-    }
-
-    val biayaLayanan = remember {
-        mutableStateOf<String?>(null)
     }
 
     val selectedDate = remember {
@@ -98,10 +100,6 @@ fun MemilihTanggal(
             emptySet()
         }
 
-    val keluhan = remember {
-        mutableStateOf("")
-    }
-
     var errorText = remember {
         mutableStateOf("")
     }
@@ -113,7 +111,7 @@ fun MemilihTanggal(
     Column() {
         MyAppBar(
             title = "Memilih tanggal",
-            navigationIcon = Icons.Filled.ArrowBack,
+            navigationIcon = Icons.Outlined.KeyboardArrowLeft,
             onNavigationClick = {
                 navController.popBackStack(Screen.HomeScreen.route, false)
             }
@@ -131,7 +129,9 @@ fun MemilihTanggal(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 OutlinedTextField(
-                    modifier = Modifier.weight(0.8f),
+                    modifier = Modifier
+                        .weight(0.8f)
+                        .padding(top = 10.dp),
                     value = selectedDate.value.toString(),
                     onValueChange = {
                         selectedDate.value = LocalDate.parse(it)
@@ -195,7 +195,10 @@ fun MemilihTanggal(
                 }
             }
 
-            Text(text = namaDok.value)
+            Text(
+                text = namaDok.value,
+                fontWeight = FontWeight.Medium
+            )
             Spacer(modifier = Modifier.weight(1f))
             MyButton(
                 onClick = {
@@ -237,6 +240,8 @@ fun LazyListDokter(
             val isSelected = remember {
                 mutableStateOf(false)
             }
+            val imgPainter = rememberAsyncImagePainter(dokter.fotoDokterUrl)
+
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -245,21 +250,42 @@ fun LazyListDokter(
                         onItemClick(dokter)
                     },
                 elevation = 2.dp,
-                backgroundColor = if (isSelected.value) Color(backColor.value) else Color(backColor.value)
+                backgroundColor = Color.White
             ) {
                 Row(
                     modifier = Modifier.padding(10.dp)
                 ) {
-                    Column(){
-                        Text(text = "ID dokter  : ${dokter.id}")
-                        Text(text = "Nama : ${dokter.nama}")
+                    Image(
+                        painter = imgPainter,
+                        contentDescription = "foto dokter",
+                        modifier = Modifier
+                            .size(80.dp, 80.dp)
+                            .padding(end = 8.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop
+                    )
+                    Column(
+                        modifier = Modifier.fillMaxWidth(0.8f),
+                        verticalArrangement = Arrangement.Center
+                    ){
+                        Text(
+                            text = "Nama : ${dokter.nama}",
+                            fontWeight = FontWeight.Medium
+                        )
                         Text(text = "Spesialis : ${dokter.spesialis}")
                     }
                     Spacer(modifier = Modifier.weight(1f))
-
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.End
+                    ){
+                        Icon(imageVector = Icons.Outlined.Star, contentDescription = "rating",
+                            tint = warningColor)
+                        Text(text = "${dokter.rating}")
+                    }
                 }
             }
-            CustomDivider()
+            CustomSpacer()
         }
     }
 

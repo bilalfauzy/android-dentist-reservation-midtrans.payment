@@ -8,5 +8,7 @@ data class DokterGigi(
     var nama: String? = null,
     var gender: String? = null,
     var spesialis: String? = null,
-    var umur: String? = null
+    var umur: String? = null,
+    var fotoDokterUrl: String? = null,
+    var rating: String? = null,
 )

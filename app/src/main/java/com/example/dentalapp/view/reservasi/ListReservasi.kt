@@ -9,12 +9,17 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.outlined.AssignmentTurnedIn
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -25,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.dentalapp.R
 import com.example.dentalapp.model.Reservasi
 import com.example.dentalapp.routes.Screen
 import com.example.dentalapp.theme.backColor
@@ -65,7 +69,7 @@ fun ListReservasi(
     ) {
         MyAppBar(
             title = "History reservasi",
-            navigationIcon = Icons.Filled.ArrowBack,
+            navigationIcon = Icons.Filled.KeyboardArrowLeft,
             onNavigationClick = {
                 navController.popBackStack(Screen.HomeScreen.route, false)
             }
@@ -115,12 +119,23 @@ fun MyListReservasi(
                 Row(
                     modifier = Modifier.padding(10.dp)
                 ) {
-                    Column(){
+                    Icon(
+                        imageVector = Icons.Outlined.AssignmentTurnedIn,
+                        contentDescription = "",
+                        tint = MaterialTheme.colors.primary,
+                        modifier = Modifier.size(30.dp)
+                    )
+
+                    Column(
+                        modifier = Modifier.fillMaxWidth(0.8f)
+                            .padding(start = 10.dp)
+                    ){
                         Text(text = "Nama  : ${reservasi.namaUser}")
                         Text(text = "Dokter : ${reservasi.namaDokter}")
                         Text(text = "Biaya : ${reservasi.biaya}")
                         Text(text = "Pembayaran : ${reservasi.jenisPembayaran}")
                         Text(text = "Status : ${reservasi.statusPembayaran}")
+
                     }
 
                     Spacer(modifier = Modifier.weight(1f))
@@ -130,7 +145,7 @@ fun MyListReservasi(
                             idRes.value = reservasi.idRes!!
 
                         },
-                        iconResId = R.drawable.baseline_delete_24,
+                        iconResId = Icons.Outlined.Delete,
                         description = "batal",
                         color = errorColor
                     )

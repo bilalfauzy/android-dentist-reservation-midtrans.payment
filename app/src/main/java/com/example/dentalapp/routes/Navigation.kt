@@ -18,7 +18,6 @@ import com.example.dentalapp.view.dashboard.doktergigi.ListDokter
 import com.example.dentalapp.view.dashboard.doktergigi.ListLayanan
 import com.example.dentalapp.view.loginregister.Login
 import com.example.dentalapp.view.loginregister.Register
-import com.example.dentalapp.view.reservasi.BerhasilMembayar
 import com.example.dentalapp.view.reservasi.DetailReservasi
 import com.example.dentalapp.view.reservasi.ListReservasi
 import com.example.dentalapp.view.reservasi.MelakukanPembayaran
@@ -148,49 +147,6 @@ fun Navigation(){
                 usersViewModel = UsersViewModel(),
                 reservasiViewModel = ReservasiViewModel(),
                 namaDok = namaDok,
-                tanggal = tanggal,
-                hari = hari,
-                jam = jam,
-                keluhan = keluhan
-            )
-        }
-
-        composable(
-            route = Screen.BerhasilMembayarScreen.route +
-                    "/{idPesanan}/{nama}/{tanggal}/{hari}/{jam}/{keluhan}",
-            arguments = listOf(
-                navArgument("idPesanan"){
-                    type = NavType.StringType
-                },
-                navArgument("nama"){
-                    type = NavType.StringType
-                },
-                navArgument("tanggal"){
-                    type = NavType.StringType
-                },
-                navArgument("hari"){
-                    type = NavType.StringType
-                },
-                navArgument("jam"){
-                    type = NavType.StringType
-                },
-                navArgument("keluhan"){
-                    type = NavType.StringType
-                },
-            )
-        ){
-            val idPesanan = it.arguments?.getString("idPesanan")!!
-            val nama = it.arguments?.getString("nama")!!
-            val tanggal = it.arguments?.getString("tanggal")!!
-            val hari = it.arguments?.getString("hari")!!
-            val jam = it.arguments?.getString("jam")!!
-            val keluhan = it.arguments?.getString("keluhan")!!
-            BerhasilMembayar(
-                navController = navController,
-                reservasiViewModel = ReservasiViewModel(),
-                usersViewModel = UsersViewModel(),
-                idPesanan = idPesanan,
-                namaDok = nama,
                 tanggal = tanggal,
                 hari = hari,
                 jam = jam,

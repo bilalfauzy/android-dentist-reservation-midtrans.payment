@@ -2,30 +2,41 @@ package com.example.dentalapp.view.dashboard
 
 import android.app.Activity
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.History
+import androidx.compose.material.icons.outlined.MedicalServices
+import androidx.compose.material.icons.outlined.Mood
+import androidx.compose.material.icons.outlined.People
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.dentalapp.R
 import com.example.dentalapp.routes.Screen
 import com.example.dentalapp.theme.backColor
 import com.example.dentalapp.theme.baseColor
-import com.example.dentalapp.view.customcomponent.*
+import com.example.dentalapp.view.customcomponent.CustomCardHome
+import com.example.dentalapp.view.customcomponent.CustomDivider
+import com.example.dentalapp.view.customcomponent.CustomSpacer
 import com.example.dentalapp.viewmodel.UsersViewModel
 import com.google.firebase.auth.FirebaseAuth
 
@@ -76,7 +87,7 @@ fun Home(
                 Text(text = "Selamat datang..\n${namaUser}")
                 Spacer(modifier = Modifier.weight(1f))
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_person_24),
+                    imageVector = Icons.Outlined.Mood,
                     contentDescription = null,
                     tint = baseColor,
                     modifier = Modifier
@@ -100,7 +111,7 @@ fun Home(
                     .clickable {
                         navController.navigate(Screen.MemilihTanggalScreen.route)
                     },
-                iconResId = R.drawable.ic_add,
+                iconResId = Icons.Outlined.Add,
                 title = "BUAT RESERVASI"
             )
 
@@ -113,7 +124,7 @@ fun Home(
                     .clickable {
                         navController.navigate(Screen.ListReservasiScreen.route)
                     },
-                iconResId = R.drawable.ic_history,
+                iconResId = Icons.Outlined.History,
                 title = "HISTORY RESERVASI"
             )
 
@@ -126,7 +137,7 @@ fun Home(
                     .clickable {
                         navController.navigate(Screen.ListDokterScreen.route)
                     },
-                iconResId = R.drawable.ic_history,
+                iconResId = Icons.Outlined.People,
                 title = "LIST DOKTER"
             )
 
@@ -139,7 +150,7 @@ fun Home(
                     .clickable {
                         navController.navigate(Screen.ListLayananScreen.route)
                     },
-                iconResId = R.drawable.ic_history,
+                iconResId = Icons.Outlined.MedicalServices,
                 title = "LIST LAYANAN"
             )
 
@@ -151,7 +162,7 @@ fun Home(
                     .clickable {
                         navController.navigate(Screen.ProfileScreen.route)
                     },
-                iconResId = R.drawable.ic_person_24,
+                iconResId = Icons.Outlined.Person,
                 title = "PROFILE"
             )
 

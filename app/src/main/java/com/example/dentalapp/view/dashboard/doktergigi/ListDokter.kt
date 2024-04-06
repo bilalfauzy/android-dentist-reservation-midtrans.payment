@@ -1,30 +1,44 @@
 package com.example.dentalapp.view.dashboard.doktergigi
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.outlined.KeyboardArrowLeft
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import coil.compose.rememberAsyncImagePainter
 import com.example.dentalapp.model.DokterGigi
 import com.example.dentalapp.routes.Screen
 import com.example.dentalapp.theme.backColor
+import com.example.dentalapp.theme.warningColor
 import com.example.dentalapp.view.customcomponent.CustomDivider
+import com.example.dentalapp.view.customcomponent.CustomSpacer
 import com.example.dentalapp.view.customcomponent.MyAppBar
 import com.example.dentalapp.viewmodel.DokterGigiViewModel
 
@@ -41,7 +55,7 @@ fun ListDokter(
     ) {
         MyAppBar(
             title = "List dokter gigi",
-            navigationIcon = Icons.Filled.ArrowBack,
+            navigationIcon = Icons.Outlined.KeyboardArrowLeft,
             onNavigationClick = {
                 navController.popBackStack(Screen.HomeScreen.route, false)
             }
@@ -68,9 +82,9 @@ fun MyListDokter(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 20.dp, bottom = 20.dp)
     ) {
         items(items) { dokter ->
+            val imgPainter = rememberAsyncImagePainter(dokter.fotoDokterUrl)
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -78,13 +92,40 @@ fun MyListDokter(
                 elevation = 2.dp
             ) {
                 Row(
-                    modifier = Modifier.padding(10.dp)
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .fillMaxHeight(0.3f),
                 ) {
-                    Column(){
-                        Text(text = "ID dokter  : ${dokter.id}")
-                        Text(text = "Nama : ${dokter.nama}")
-                        Text(text = "Spesialis : ${dokter.spesialis}")
+                    Image(
+                        painter = imgPainter,
+                        contentDescription = "foto dokter",
+                        modifier = Modifier
+                            .size(100.dp, 100.dp)
+                            .padding(end = 8.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop
+                    )
+                    Column(
+                        modifier = Modifier.fillMaxWidth(0.8f)
+                    ){
+                        Text(
+                            text = "${dokter.nama}",
+                            fontWeight = FontWeight.Medium
+                        )
+                        CustomDivider()
+                        CustomSpacer()
+                        Text(text = "${dokter.gender}")
+                        Text(text = "${dokter.spesialis}")
                     }
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.End
+                    ){
+                        Icon(imageVector = Icons.Outlined.Star, contentDescription = "rating",
+                            tint = warningColor)
+                        Text(text = "${dokter.rating}")
+                    }
+
                     Spacer(modifier = Modifier.weight(1f))
 
                 }
